@@ -1,7 +1,14 @@
 module.exports = {
+  siteMetadata: {
+    url: `https://trackerandcasey.pet`,
+    title: `The sweetest boys`,
+    description: `A website to show off pictures of the sweet cats Tracker and Casey`,
+    twitter: `@khristophor`
+  },
   plugins: [
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
+    'gatsby-plugin-react-helmet',
     {
       resolve: `gatsby-plugin-netlify`,
       options: {

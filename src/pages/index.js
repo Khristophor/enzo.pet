@@ -66,38 +66,41 @@ export default class extends React.Component {
     this.props.data.images.edges[this.state.imageIndex].node.childImageSharp
       .resize;
 
+  renderHead = () => {
+    const {
+      site: { siteMetadata }
+    } = this.props.data;
+
+    return (
+      <Helmet>
+        <title>{siteMetadata.title}</title>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link key="icon" rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+        />
+        <meta name="description" content={siteMetadata.description} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content={siteMetadata.twitter} />
+        <meta name="twitter:creator" content={siteMetadata.twitter} />
+        <meta property="og:url" content={siteMetadata.url} />
+        <meta property="og:title" content={siteMetadata.title} />
+        <meta property="og:description" content={siteMetadata.description} />
+        <meta
+          property="og:image"
+          content={`${siteMetadata.url}${this.currentImage().src}`}
+        />
+      </Helmet>
+    );
+  };
+
   render() {
-    const { firstImageLoaded } = this.state;
     const image = this.currentImage();
-    const siteTitle = 'The sweetest boys';
-    const siteDescription =
-      'A website to show off pictures of the sweet cats Tracker and Casey';
 
     return (
       <div className="wrapper" onClick={() => this.nextImage()}>
-        <Helmet>
-          <link
-            key="shortcut-icon"
-            rel="shortcut icon"
-            href="/favicon.ico"
-            type="image/x-icon"
-          />
-          <link key="icon" rel="icon" href="/favicon.ico" type="image/x-icon" />
-
-          <title itemProp="name" lang="en">
-            {siteTitle}
-          </title>
-
-          <meta name="description" content={siteDescription} />
-
-          <meta name="twitter:card" value="summary" />
-
-          <meta property="og:title" content={siteTitle} />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://trackerandcasey.pet" />
-          <meta property="og:image" content={`https://trackerandcasey.pet${image.src}`} />
-          <meta property="og:description" content={siteDescription} />
-        </Helmet>
+        {this.renderHead()}
         <div
           className="background"
           style={{ backgroundImage: `url(${image.src})` }}
@@ -105,7 +108,7 @@ export default class extends React.Component {
         <img
           src={image.src}
           alt="Sweet cat being sweet"
-          style={{ opacity: firstImageLoaded ? 1 : 0 }}
+          style={{ opacity: this.state.firstImageLoaded ? 1 : 0 }}
         />
       </div>
     );
@@ -114,7 +117,18 @@ export default class extends React.Component {
 
 export const PageQuery = graphql`
   query IndexQuery {
-    images: allFile(filter: { sourceInstanceName: { eq: "images" } }, sort: { fields: name, order: ASC }) {
+    site {
+      siteMetadata {
+        url
+        title
+        description
+        twitter
+      }
+    }
+    images: allFile(
+      filter: { sourceInstanceName: { eq: "images" } }
+      sort: { fields: name, order: ASC }
+    ) {
       edges {
         node {
           childImageSharp {
