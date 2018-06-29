@@ -1,29 +1,16 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import Helmet from 'react-helmet';
-import muzzle from 'lodash/throttle';
 
 import './style.css';
 
 export default class extends React.Component {
   state = {
     imageIndex: 0,
-    barkCount: -1,
     firstImageLoaded: false
   };
 
   componentDidMount() {
-    // create the audio sources for each bark file
-    this.audio = this.props.data.audio.edges.map(
-      edge => new Audio(edge.node.publicURL)
-    );
-
-    // create a clone of the array that we will splice from to ensure unique barks
-    this.barks = [...this.audio];
-
-    // bark after the page has been loaded for 1 second
-    setTimeout(this.bark, 1000);
-
     // preload images
     this.props.data.images.edges.forEach((edge, i) => {
       let image = new Image();
@@ -59,38 +46,7 @@ export default class extends React.Component {
     }
   };
 
-  bark = () => {
-    // log the bark event to google analytics
-    if (window.ga) {
-      window.ga('send', 'event', 'bark', 'bark');
-    }
-
-    // pull a random bark from the remaining barks
-    const bark = this.barks.splice(
-      Math.floor(Math.random() * this.barks.length),
-      1
-    );
-
-    // clone the bark so multiple barks can play simultaneously
-    bark[0].cloneNode().play();
-
-    // increment the bark count
-    this.setState(prevState => ({ barkCount: prevState.barkCount + 1 }));
-
-    // if we run out of barks, refresh the array
-    // from the saved set of audio objects
-    if (!this.barks.length) {
-      this.barks = [...this.audio];
-    }
-  };
-
-  // muzzle (throttle) the barking in case the user
-  // holds the arrow keys or clicks fast
-  muzzledBark = muzzle(this.bark, 350);
-
   nextImage = (delta = 1) => {
-    this.muzzledBark();
-
     this.setState(prevState => {
       const next = prevState.imageIndex + delta;
       const lastImage = this.props.data.images.edges.length - 1;
@@ -111,28 +67,35 @@ export default class extends React.Component {
       .resize;
 
   render() {
-    const { firstImageLoaded, barkCount } = this.state;
+    const { firstImageLoaded } = this.state;
     const image = this.currentImage();
-    const titleBarks = (barkCount % 3) + 1;
+    const siteTitle = "The sweetest boys";
+    const siteDescription = "A website to show off pictures of the sweet cats Tracker and Casey";
 
     return (
       <div className="wrapper" onClick={() => this.nextImage()}>
-        {barkCount >= 0 && (
-          <Helmet>
-            <title>
-              {Array(titleBarks)
-                .fill('bark')
-                .join(' ')}
-            </title>
-          </Helmet>
-        )}
+        <Helmet>
+          <title itemProp="name" lang="en">{siteTitle}</title>
+
+          <meta key="content-type" http-equiv="Content-Type" content="text/html; charset=utf-8" />
+          
+          <meta name="description" content={siteDescription} />
+
+          <meta name="twitter:card" value="summary" />
+
+          <meta property="og:title" content={siteTitle} />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://trackerandcasey.pet" />
+          <meta property="og:image" content={image.src} />
+          <meta property="og:description" content={siteDescription} />
+        </Helmet>
         <div
           className="background"
           style={{ backgroundImage: `url(${image.src})` }}
         />
         <img
           src={image.src}
-          alt="Enzo!"
+          alt="Sweet cat being sweet"
           style={{ opacity: firstImageLoaded ? 1 : 0 }}
         />
       </div>
@@ -150,13 +113,6 @@ export const PageQuery = graphql`
               src
             }
           }
-        }
-      }
-    }
-    audio: allFile(filter: { sourceInstanceName: { eq: "audio" } }) {
-      edges {
-        node {
-          publicURL
         }
       }
     }

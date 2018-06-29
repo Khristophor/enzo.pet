@@ -19,16 +19,9 @@ module.exports = {
       }
     },
     {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `audio`,
-        path: `${__dirname}/audio/`
-      }
-    },
-    {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: 'UA-39372803-2'
+        trackingId: 'UA-77905615-2'
       }
     }
   ]
