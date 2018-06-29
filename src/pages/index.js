@@ -69,16 +69,36 @@ export default class extends React.Component {
   render() {
     const { firstImageLoaded } = this.state;
     const image = this.currentImage();
-    const siteTitle = "The sweetest boys";
-    const siteDescription = "A website to show off pictures of the sweet cats Tracker and Casey";
+    const siteTitle = 'The sweetest boys';
+    const siteDescription =
+      'A website to show off pictures of the sweet cats Tracker and Casey';
 
     return (
       <div className="wrapper" onClick={() => this.nextImage()}>
         <Helmet>
-          <title itemProp="name" lang="en">{siteTitle}</title>
+          <link
+            key="shortcut-icon"
+            rel="shortcut icon"
+            href="/favicon.ico"
+            type="image/x-icon"
+          />
+          <link key="icon" rel="icon" href="/favicon.ico" type="image/x-icon" />
+          <meta
+            key="viewport"
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          />
 
-          <meta key="content-type" http-equiv="Content-Type" content="text/html; charset=utf-8" />
-          
+          <title itemProp="name" lang="en">
+            {siteTitle}
+          </title>
+
+          <meta
+            key="content-type"
+            http-equiv="Content-Type"
+            content="text/html; charset=utf-8"
+          />
+
           <meta name="description" content={siteDescription} />
 
           <meta name="twitter:card" value="summary" />

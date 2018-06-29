@@ -1,13 +1,11 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 
 export const onRenderBody = ({ setHeadComponents }) => {
+  const helmet = Helmet.renderStatic()
   setHeadComponents([
-    <link key="shortcut-icon" rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />,
-    <link key="icon" rel="icon" href="/favicon.ico" type="image/x-icon" />,
-    <meta
-      key="viewport"
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
+    helmet.title.toComponent(),
+    helmet.link.toComponent(),
+    helmet.meta.toComponent()
   ]);
 };
