@@ -83,21 +83,10 @@ export default class extends React.Component {
             type="image/x-icon"
           />
           <link key="icon" rel="icon" href="/favicon.ico" type="image/x-icon" />
-          <meta
-            key="viewport"
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-          />
 
           <title itemProp="name" lang="en">
             {siteTitle}
           </title>
-
-          <meta
-            key="content-type"
-            http-equiv="Content-Type"
-            content="text/html; charset=utf-8"
-          />
 
           <meta name="description" content={siteDescription} />
 
@@ -106,7 +95,7 @@ export default class extends React.Component {
           <meta property="og:title" content={siteTitle} />
           <meta property="og:type" content="website" />
           <meta property="og:url" content="https://trackerandcasey.pet" />
-          <meta property="og:image" content={image.src} />
+          <meta property="og:image" content={`https://trackerandcasey.pet${image.src}`} />
           <meta property="og:description" content={siteDescription} />
         </Helmet>
         <div
