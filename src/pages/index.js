@@ -114,7 +114,7 @@ export default class extends React.Component {
 
 export const PageQuery = graphql`
   query IndexQuery {
-    images: allFile(filter: { sourceInstanceName: { eq: "images" } }) {
+    images: allFile(filter: { sourceInstanceName: { eq: "images" } }, sort: { fields: name, order: ASC }) {
       edges {
         node {
           childImageSharp {
